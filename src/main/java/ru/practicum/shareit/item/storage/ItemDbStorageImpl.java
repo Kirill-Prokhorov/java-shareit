@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.model.Item;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -23,10 +24,7 @@ public class ItemDbStorageImpl implements ItemDbStorage {
 
     @Override
     public List<Item> getListItemByUserId(Long userId) {
-        return itemMap.values()
-                .stream()
-                .filter(el -> el.getOwner().getId().equals(userId))
-                .collect(Collectors.toList());
+        return itemMap.values().stream().filter(el -> el.getOwner().getId().equals(userId)).collect(Collectors.toList());
     }
 
     @Override
@@ -69,12 +67,6 @@ public class ItemDbStorageImpl implements ItemDbStorage {
 
     @Override
     public List<Item> searchItem(String text) {
-        return itemMap.values()
-                .stream()
-                .filter(el -> (!text.isEmpty() &&
-                        (el.getName().toLowerCase(Locale.ROOT).contains(text.toLowerCase(Locale.ROOT)) ||
-                        el.getDescription().toLowerCase(Locale.ROOT).contains(text.toLowerCase(Locale.ROOT)))))
-                .filter(Item::getAvailable)
-                .collect(Collectors.toList());
+        return itemMap.values().stream().filter(el -> (!text.isEmpty() && (el.getName().toLowerCase(Locale.ROOT).contains(text.toLowerCase(Locale.ROOT)) || el.getDescription().toLowerCase(Locale.ROOT).contains(text.toLowerCase(Locale.ROOT))))).filter(Item::getAvailable).collect(Collectors.toList());
     }
 }

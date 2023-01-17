@@ -27,10 +27,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> getListItemByUserId(Long userId) {
-        return itemDbStorage.getListItemByUserId(userId)
-                .stream()
-                .map(ItemMapper::toItemDto)
-                .collect(Collectors.toList());
+        return itemDbStorage.getListItemByUserId(userId).stream().map(ItemMapper::toItemDto).collect(Collectors.toList());
     }
 
     @Override
@@ -64,10 +61,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> searchItem(String text) {
-        return itemDbStorage.searchItem(text)
-                .stream()
-                .map(ItemMapper::toItemDto)
-                .collect(Collectors.toList());
+        return itemDbStorage.searchItem(text).stream().map(ItemMapper::toItemDto).collect(Collectors.toList());
     }
 
 }

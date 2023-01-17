@@ -21,6 +21,7 @@ public class UserDbStorageImpl implements UserDbStorage {
         this.emailSet = new HashSet<>();
         this.counter = 1L;
     }
+
     @Override
     public User getUserById(Long userId) {
         User user = userMap.get(userId);
