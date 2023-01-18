@@ -13,12 +13,10 @@ import java.util.*;
 public class UserDbStorageImpl implements UserDbStorage {
 
     private final Map<Long, User> userMap;
-    private final Set<String> emailSet;
     private Long counter;
 
     public UserDbStorageImpl() {
         this.userMap = new HashMap<>();
-        this.emailSet = new HashSet<>();
         this.counter = 1L;
     }
 
@@ -38,33 +36,22 @@ public class UserDbStorageImpl implements UserDbStorage {
 
     @Override
     public User createUser(User user) {
-        if (user.getEmail() == null) {
-            user.setEmail(user.getName() + "@user.com");
-        }
-        if (emailSet.contains(user.getEmail())) {
-            throw new DuplicateEmailException("Почта уже используется");
-        }
+        checkDuplicateEmail(user.getEmail());
         user.setId(counter);
         userMap.put(counter, user);
         counter++;
-        emailSet.add(user.getEmail());
         return user;
     }
 
     @Override
     public User updateUser(Long userId, User userNew) {
-        if (emailSet.contains(userNew.getEmail())) {
-            throw new DuplicateEmailException("Почта уже используется");
-        }
+        checkDuplicateEmail(userNew.getEmail());
         User user = userMap.get(userId);
-        String email = user.getEmail();
         if (userNew.getName() != null) {
             user.setName(userNew.getName());
         }
         if (userNew.getEmail() != null) {
             user.setEmail(userNew.getEmail());
-            emailSet.remove(email);
-            emailSet.add(userNew.getEmail());
         }
         userMap.put(userId, user);
         return user;
@@ -72,8 +59,15 @@ public class UserDbStorageImpl implements UserDbStorage {
 
     @Override
     public void deleteUserById(Long userId) {
-        emailSet.remove(userMap.get(userId).getEmail());
         userMap.remove(userId);
+    }
+
+    private void checkDuplicateEmail(String email) {
+        for (User userFromMap : userMap.values()) {
+            if (userFromMap.getEmail().equals(email)) {
+                throw new DuplicateEmailException("Почта уже используется");
+            }
+        }
     }
 
 }

@@ -8,7 +8,6 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.storage.UserDbStorage;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -22,29 +21,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserById(Long userId) {
-        User user = userDbStorage.getUserById(userId);
-        return UserMapper.userToDto(user);
+    public User getUserDtoById(Long userId) {
+        return userDbStorage.getUserById(userId);
     }
 
     @Override
-    public List<UserDto> getAllUsers() {
-        return userDbStorage.getAllUsers()
-                .stream()
-                .map(UserMapper::userToDto)
-                .collect(Collectors.toList());
+    public List<User> getAllUsersDto() {
+        return userDbStorage.getAllUsers();
+
     }
 
     @Override
-    public UserDto createUser(UserDto userDto) {
-        User user = userDbStorage.createUser(UserMapper.fromDtoToUser(userDto));
-        return UserMapper.userToDto(user);
+    public User createUser(UserDto userDto) {
+        return userDbStorage.createUser(UserMapper.fromDtoToUser(userDto));
     }
 
     @Override
-    public UserDto updateUser(Long userId, UserDto userDto) {
+    public User updateUser(Long userId, UserDto userDto) {
         User user = UserMapper.fromDtoToUser(userDto);
-        return UserMapper.userToDto(userDbStorage.updateUser(userId, user));
+        return userDbStorage.updateUser(userId, user);
     }
 
     @Override
