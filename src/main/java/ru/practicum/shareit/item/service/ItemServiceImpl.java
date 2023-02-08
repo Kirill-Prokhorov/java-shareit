@@ -35,7 +35,7 @@ public class ItemServiceImpl implements ItemService {
     private final BookingDbStorage bookingDbStorage;
     private final CommentDbStorage commentDbStorage;
 
-    @Transactional
+    @Override
     public List<ItemDtoWithBooking> getListItemByUserId(Long userId) {
         return itemDbStorage.findByOwnerIdOrderByIdAsc(userId)
                 .stream()
@@ -51,7 +51,7 @@ public class ItemServiceImpl implements ItemService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
+    @Override
     public ItemDtoWithBooking getItemById(Long itemId, Long userId) {
         Item item = itemDbStorage.findById(itemId)
                 .orElseThrow(() -> new NotFoundException(String.format("Вещь с ID %s не найдена", itemId)));
@@ -87,6 +87,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Transactional
+    @Override
     public ItemDto updateItem(Long userId, Long itemId, ItemDto itemDto) {
         Item updatedItem = itemDbStorage.findById(itemId)
                 .orElseThrow(() -> new NotFoundException(String.format("Предмет с ID %s не найден", itemId)));
@@ -111,7 +112,7 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.toItemDto(itemDbStorage.save(updatedItem));
     }
 
-    @Transactional
+    @Override
     public List<ItemDto> searchItem(String text) {
         if (text.isBlank() || text.isEmpty()) {
             return new ArrayList<>();
@@ -123,6 +124,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Transactional
+    @Override
     public CommentDto addComment(Long itemId, Long userId, CommentDto commentDto) {
 
         if (commentDto.getText().isEmpty() || commentDto.getText().isBlank()) {
