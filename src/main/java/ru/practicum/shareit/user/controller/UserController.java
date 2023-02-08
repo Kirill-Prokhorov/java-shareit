@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.UserMapper;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -11,18 +12,15 @@ import java.util.stream.Collectors;
 
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(path = "/users")
 public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
     @GetMapping("/{userId}")
     public UserDto getUserDtoById(@PathVariable Long userId) {
-        return UserMapper.userToDto(userService.getUserDtoById(userId));
+        return UserMapper.userToDto(userService.getUserById(userId));
     }
 
     @GetMapping
