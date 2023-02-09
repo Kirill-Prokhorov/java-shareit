@@ -19,6 +19,7 @@ import java.util.Set;
 @Table(name = "items")
 public class Item {
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -28,7 +29,7 @@ public class Item {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "available", nullable = false)
+    @Column(name = "is_available", nullable = false)
     private Boolean available;
 
     @ManyToOne
