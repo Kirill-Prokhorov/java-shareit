@@ -3,14 +3,12 @@ package ru.practicum.shareit.booking.controller;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.service.BookingService;
 
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RestController
