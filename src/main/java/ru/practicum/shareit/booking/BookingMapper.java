@@ -37,6 +37,7 @@ public class BookingMapper {
                 .status(booking.getStatus())
                 .build();
     }
+    
     public static List<BookingDto> toBookingDtoList(List<Booking> booking) {
 
         return booking

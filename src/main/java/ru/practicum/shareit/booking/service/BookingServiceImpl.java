@@ -20,7 +20,6 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -149,10 +148,7 @@ public class BookingServiceImpl implements BookingService {
                 break;
         }
 
-        return bookings
-                .stream()
-                .map(BookingMapper::toBookingDto)
-                .collect(Collectors.toList());
+        return BookingMapper.toBookingDtoList(bookings);
     }
 
     public List<BookingDto> getAllBookingByOwner(Long userId, String stateStr) {
@@ -182,10 +178,7 @@ public class BookingServiceImpl implements BookingService {
                 break;
         }
 
-        return bookings
-                .stream()
-                .map(BookingMapper::toBookingDto)
-                .collect(Collectors.toList());
+        return BookingMapper.toBookingDtoList(bookings);
     }
 
     @Transactional
