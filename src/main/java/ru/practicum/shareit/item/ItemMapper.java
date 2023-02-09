@@ -1,6 +1,9 @@
 package ru.practicum.shareit.item;
 
 import lombok.extern.slf4j.Slf4j;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoWithBooking;
@@ -12,8 +15,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
+@Mapper
 public class ItemMapper {
 
+    @Mapping(target = "owner", ignore = true)
     public static ItemDto toItemDto(Item item) {
 
         log.info("Собираем вещь в ДТО");
