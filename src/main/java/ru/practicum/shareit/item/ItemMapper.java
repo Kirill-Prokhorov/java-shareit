@@ -15,10 +15,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
-@Mapper
 public class ItemMapper {
 
-    @Mapping(target = "owner", ignore = true)
     public static ItemDto toItemDto(Item item) {
 
         log.info("Собираем вещь в ДТО");
