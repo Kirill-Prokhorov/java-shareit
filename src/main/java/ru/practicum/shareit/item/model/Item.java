@@ -29,7 +29,7 @@ public class Item {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "is_available", nullable = false)
+    @Column(name = "available", nullable = false)
     private Boolean available;
 
     @ManyToOne
