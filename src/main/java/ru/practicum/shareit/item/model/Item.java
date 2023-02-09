@@ -19,7 +19,6 @@ import java.util.Set;
 @Table(name = "items")
 public class Item {
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
