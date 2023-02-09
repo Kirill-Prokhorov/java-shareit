@@ -13,13 +13,13 @@ import java.util.stream.Collectors;
 public class BookingMapper {
 
     public static BookingDto toBookingDto(Booking booking) {
-        BookingDto.ItemDto itemDto = new BookingDto.ItemDto(
+        BookingDto.Item item = new BookingDto.Item(
         );
-        BookingDto.UserDto bookerDto = new BookingDto.UserDto();
+        BookingDto.User bookerDto = new BookingDto.User();
 
         if (booking.getItem() != null) {
-            itemDto.setId(booking.getItem().getId());
-            itemDto.setName(booking.getItem().getName());
+            item.setId(booking.getItem().getId());
+            item.setName(booking.getItem().getName());
         }
 
         if (booking.getBooker() != null) {
@@ -32,8 +32,8 @@ public class BookingMapper {
                 .itemId(booking.getItem().getId())
                 .start(booking.getStart())
                 .end(booking.getEnd())
-                .itemDto(itemDto)
-                .bookerDto(bookerDto)
+                .item(item)
+                .booker(bookerDto)
                 .status(booking.getStatus())
                 .build();
     }
