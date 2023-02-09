@@ -155,7 +155,7 @@ public class BookingServiceImpl implements BookingService {
                 .collect(Collectors.toList());
     }
 
-    public List<Booking> getAllBookingByOwner(Long userId, String stateStr) {
+    public List<BookingDto> getAllBookingByOwner(Long userId, String stateStr) {
 
         State state = getStateByStr(stateStr);
         List<Booking> bookings = new ArrayList<>();
@@ -182,11 +182,14 @@ public class BookingServiceImpl implements BookingService {
                 break;
         }
 
-        return bookings;
+        return bookings
+                .stream()
+                .map(BookingMapper::toBookingDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional
-    public List<Booking> getAllBookingByOwnerId(Long ownerId, String stateStr) {
+    public List<BookingDto> getAllBookingByOwnerId(Long ownerId, String stateStr) {
 
         userDbStorage.findById(ownerId)
                 .orElseThrow(() -> new NotFoundException(String.format("Пользователь с ID %s не найден", ownerId)));

@@ -15,16 +15,16 @@ public class BookingDto {
     private Long id;
     private LocalDateTime start;
     private LocalDateTime end;
-    private Item item;
+    private ItemDto itemDto;
     private Long itemId;
-    private User booker;
+    private UserDto bookerDto;
     private Status status;
 
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class Item {
+    public static class ItemDto {
         private Long id;
         private String name;
     }
@@ -33,7 +33,7 @@ public class BookingDto {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class User {
+    public static class UserDto {
         private Long id;
     }
 }

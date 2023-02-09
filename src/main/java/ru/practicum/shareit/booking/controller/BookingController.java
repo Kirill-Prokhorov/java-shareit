@@ -2,7 +2,6 @@ package ru.practicum.shareit.booking.controller;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.booking.dto.BookingDto;
@@ -19,8 +18,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookingController {
 
-
-    @Autowired
     private final BookingService bookingService;
 
     @PostMapping
@@ -49,10 +46,7 @@ public class BookingController {
     @GetMapping("/owner")
     public List<BookingDto> getAllBookingForOwner(@RequestHeader("X-Sharer-User-Id") Long userId,
                                                   @PathParam("state") String state) {
-        return bookingService.getAllBookingByOwnerId(userId, state)
-                .stream()
-                .map(BookingMapper::toBookingDto)
-                .collect(Collectors.toList());
+        return bookingService.getAllBookingByOwnerId(userId, state);
     }
 
 }
