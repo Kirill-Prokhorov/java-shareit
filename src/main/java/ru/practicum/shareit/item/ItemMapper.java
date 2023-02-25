@@ -1,39 +1,41 @@
 package ru.practicum.shareit.item;
 
-import lombok.extern.slf4j.Slf4j;
-
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoWithBooking;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Slf4j
 public class ItemMapper {
 
-    public static ItemDto toItemDto(Item item) {
+    public static Item toItem(ItemDto itemDto, User user) {
 
-        log.info("Собираем вещь в ДТО");
+        Item item = new Item();
+        if (itemDto.getRequestId() != null) {
+            ItemRequest itemRequest = new ItemRequest();
+            itemRequest.setId(itemDto.getRequestId());
+            item.setRequest(itemRequest);
+        }
+        item.setId(itemDto.getId());
+        item.setName(itemDto.getName());
+        item.setDescription(itemDto.getDescription());
+        item.setAvailable(itemDto.getAvailable());
+        return item;
+    }
+
+    public static ItemDto toItemDto(Item item) {
+        Long requestId = item.getRequest() == null ? null : item.getRequest().getId();
         return ItemDto.builder()
                 .id(item.getId())
                 .name(item.getName())
                 .description(item.getDescription())
-                .available(item.getAvailable()).build();
-    }
-
-    public static Item toItem(ItemDto itemDto, User user) {
-
-        log.info("Собираем вещь из ДТО");
-        return Item.builder()
-                .id(itemDto.getId())
-                .name(itemDto.getName())
-                .description(itemDto.getDescription())
-                .available(itemDto.getAvailable())
-                .owner(user)
+                .available(item.getAvailable())
+                .requestId(requestId)
                 .build();
     }
 
@@ -58,12 +60,12 @@ public class ItemMapper {
             lstBooking = null;
         }
 
-        ItemDtoWithBooking.Booking nextBooking1 = new ItemDtoWithBooking.Booking();
+        ItemDtoWithBooking.Booking nxtBooking = new ItemDtoWithBooking.Booking();
         if (nextBooking != null) {
-            nextBooking1.setId(nextBooking.getId());
-            nextBooking1.setBookerId(nextBooking.getBooker().getId());
+            nxtBooking.setId(nextBooking.getId());
+            nxtBooking.setBookerId(nextBooking.getBooker().getId());
         } else {
-            nextBooking1 = null;
+            nxtBooking = null;
         }
 
         return ItemDtoWithBooking.builder()
@@ -72,7 +74,7 @@ public class ItemMapper {
                 .description(item.getDescription())
                 .available(item.getAvailable())
                 .lastBooking(lstBooking)
-                .nextBooking(nextBooking1)
+                .nextBooking(nxtBooking)
                 .comments(comments)
                 .build();
     }

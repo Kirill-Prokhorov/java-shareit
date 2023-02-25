@@ -1,5 +1,6 @@
 package ru.practicum.shareit.request.model;
 
+
 import lombok.*;
 import ru.practicum.shareit.user.model.User;
 
@@ -30,5 +31,4 @@ public class ItemRequest {
 
     @Column(name = "created")
     private LocalDateTime created;
-
 }

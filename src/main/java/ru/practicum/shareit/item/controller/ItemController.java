@@ -7,7 +7,6 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoWithBooking;
 import ru.practicum.shareit.item.service.ItemService;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -17,35 +16,37 @@ public class ItemController {
 
     private final ItemService itemService;
 
-    @GetMapping
-    public List<ItemDtoWithBooking> getListItemByUserId(@RequestHeader("X-Sharer-User-Id") Long userId) {
-        return itemService.getListItemByUserId(userId);
-    }
-
-    @GetMapping("/{itemId}")
-    public ItemDtoWithBooking getItemById(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                          @PathVariable Long itemId) {
-        return itemService.getItemById(itemId, userId);
-    }
-
     @PostMapping
-    public ItemDto createItem(@RequestHeader("X-Sharer-User-Id") Long userId, @Valid @RequestBody ItemDto itemDto) {
-        return itemService.createItem(userId, itemDto);
+    public ItemDto createItem(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestBody ItemDto itemDto) {
+        return itemService.createItem(itemDto, userId);
+    }
+
+    @PatchMapping("/{id}")
+    public ItemDto updateItem(@RequestHeader("X-Sharer-User-Id") Long userId,
+                              @RequestBody ItemDto itemDto, @PathVariable Long id) {
+        return itemService.updateItem(itemDto, id, userId);
+    }
+
+    @GetMapping("/{id}")
+    public ItemDtoWithBooking getItemById(@RequestHeader("X-Sharer-User-Id") Long userId,
+                                          @PathVariable Long id) {
+        return itemService.getItemById(id, userId);
+    }
+
+    @GetMapping
+    public List<ItemDtoWithBooking> retrieveAllItem(@RequestHeader("X-Sharer-User-Id") Long userId) {
+        return itemService.retrieveAllItemByUserId(userId);
+    }
+
+
+    @GetMapping("/search")
+    public List<ItemDto> searchItemByKeyword(@RequestParam(name = "text", defaultValue = "") String keyword) {
+        return itemService.searchItemByKeyword(keyword);
     }
 
     @PostMapping("/{itemId}/comment")
     public CommentDto addComment(@RequestHeader("X-Sharer-User-Id") Long userId,
                                  @PathVariable Long itemId, @RequestBody CommentDto commentDto) {
         return itemService.addComment(itemId, userId, commentDto);
-    }
-
-    @PatchMapping("/{itemId}")
-    public ItemDto updateItem(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long itemId, @RequestBody ItemDto itemDto) {
-        return itemService.updateItem(userId, itemId, itemDto);
-    }
-
-    @GetMapping("/search")
-    public List<ItemDto> searchItem(@RequestParam(required = false) String text) {
-        return itemService.searchItem(text);
     }
 }
