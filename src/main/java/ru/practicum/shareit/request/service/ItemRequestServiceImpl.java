@@ -30,7 +30,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     private final ItemRequestRepository itemRequestRepository;
     private final UserRepository userRepository;
-
     private final ItemRepository itemRepository;
 
     @Override
@@ -85,8 +84,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
                     .map(itemRequest
                             -> ItemRequestMapper.toItemRequestDto(itemRequest, requestItemMap.get(itemRequest.getId())))
                     .collect(Collectors.toList());
-        }
-        else {
+        } else {
             throw new ValidationException("size and from have to positive");
         }
     }
