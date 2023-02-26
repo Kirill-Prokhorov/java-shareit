@@ -58,7 +58,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
                 .map(itemRequest
                         -> ItemRequestMapper.toItemRequestDto(itemRequest, requestItemMap.get(itemRequest.getId())))
                 .collect(Collectors.toList());
-
     }
 
     @Override
