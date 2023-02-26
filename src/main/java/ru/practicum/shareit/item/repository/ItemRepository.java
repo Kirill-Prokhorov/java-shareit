@@ -19,4 +19,5 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     Collection<Item> findByKeyword(@Param("keyword") String keyword);
 
     List<Item> findByRequest_Id(Long id, Sort sort);
+
 }

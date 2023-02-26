@@ -17,7 +17,10 @@ import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,12 +52,13 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(String.format("User with ID %s not found", userId)));
 
-        List<ItemRequest> itemRequests = itemRequestRepository.findByRequester_IdOrderByCreatedAsc(userId);
-        List<Item> items = itemRequestRepository.findItemsByListOfRequests(itemRequests);
-
-        return itemRequests.stream()
-                .map(e -> ItemRequestMapper.toItemRequestDto(e, items))
+        Map<Long, List<Item>> requestItemMap = extractItemsToRequests();
+        return itemRequestRepository.findByRequester_IdOrderByCreatedAsc(userId)
+                .stream()
+                .map(itemRequest
+                        -> ItemRequestMapper.toItemRequestDto(itemRequest, requestItemMap.get(itemRequest.getId())))
                 .collect(Collectors.toList());
+
     }
 
     @Override
@@ -72,17 +76,37 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     public List<ItemRequestDto> findAll(Long userId, int from, int size) {
-        if (size <= 0 || from < 0) {
+        if (from >= 0 && size > 0) {
+
+            Map<Long, List<Item>> requestItemMap = extractItemsToRequests();
+            return itemRequestRepository.findByRequester_IdNot(userId,
+                            PageRequest.of(from / size, size,
+                                    Sort.by("created").descending()))
+                    .stream()
+                    .map(itemRequest
+                            -> ItemRequestMapper.toItemRequestDto(itemRequest, requestItemMap.get(itemRequest.getId())))
+                    .collect(Collectors.toList());
+        }
+        else {
             throw new ValidationException("size and from have to positive");
         }
+    }
 
-        List<ItemRequest> itemRequests = itemRequestRepository.findByRequester_IdNot(userId,
-                PageRequest.of(from / size, size, Sort.by("created").descending()));
-        List<Item> items = itemRequestRepository.findItemsByListOfRequests(itemRequests);
-
-        return itemRequests.stream()
-                .map(e -> ItemRequestMapper.toItemRequestDto(e, items))
-                .collect(Collectors.toList());
+    private Map<Long, List<Item>> extractItemsToRequests() {
+        Map<Long, List<Item>> requestItemMap = new HashMap<>();
+        List<Item> itemList = itemRepository.findAll();
+        List<ItemRequest> itemRequestList = itemRequestRepository.findAll();
+        for (ItemRequest itemRequest : itemRequestList) {
+            List<Item> itemsToAdd = new ArrayList<>();
+            for (Item item : itemList) {
+                if (item.getRequest() != null &&
+                        item.getRequest().getId().equals(itemRequest.getId())) {
+                    itemsToAdd.add(item);
+                }
+            }
+            requestItemMap.put(itemRequest.getId(), itemsToAdd);
+        }
+        return requestItemMap;
     }
 
     private void validate(ItemRequest itemRequest) {

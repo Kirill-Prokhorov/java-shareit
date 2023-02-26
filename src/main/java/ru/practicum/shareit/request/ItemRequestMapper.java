@@ -1,5 +1,6 @@
 package ru.practicum.shareit.request;
 
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
@@ -20,11 +21,11 @@ public class ItemRequestMapper {
     }
 
     public static ItemRequestDto toItemRequestDto(ItemRequest itemRequest, List<Item> items) {
-        List<ItemRequestDto.ItemDto> itemRequestDtos = null;
+        List<ItemDto> itemRequestDtos = null;
         if (items != null) {
             itemRequestDtos = items
                     .stream()
-                    .map(item -> ItemRequestDto.ItemDto.builder()
+                    .map(item -> ItemDto.builder()
                             .id(item.getId())
                             .available(item.getAvailable())
                             .requestId(item.getRequest().getId())
