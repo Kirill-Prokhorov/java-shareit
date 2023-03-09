@@ -35,5 +35,12 @@ public class ErrorHandler {
         return new ResponseEntity<>(Map.of("error", e.getMessage()),
                 HttpStatus.CONFLICT);
     }
-}
 
+    @ExceptionHandler
+    public ResponseEntity<Map<String, String>> handleIllegalArgumentException(
+            final IllegalArgumentException e) {
+        log.info(e.getMessage());
+        return new ResponseEntity<>(Map.of("error",
+                e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}

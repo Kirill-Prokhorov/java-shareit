@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
@@ -23,9 +22,7 @@ public class User {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @NotBlank
     @Email
     @Column(name = "email", nullable = false, unique = true)
     private String email;
-
 }
